@@ -1,28 +1,48 @@
-﻿
+﻿@model StoreFront.UI.MVC.Models.ContactViewModel
 @{
     ViewData["Title"] = "Contact";
 }
-<!-- contact section start -->
-<div class="contact_section layout_padding">
-    <div class="container">
-        <div class="contact_main">
-            <h1 class="request_text">A Call Back</h1>
-            <form action="/action_page.php">
-                <div class="form-group">
-                    <input type="text" class="email-bt" placeholder="Name" name="Name">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="email-bt" placeholder="Email" name="Name">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="email-bt" placeholder="Phone Numbar" name="Email">
-                </div>
-                <div class="form-group">
-                    <textarea class="massage-bt" placeholder="Massage" rows="5" id="comment" name="Massage"></textarea>
-                </div>
-            </form>
-            <div class="send_btn"><a href="#">SEND</a></div>
-        </div>
-    </div>
-</div>
-<!-- contact section end -->
+<!-- Start Contact -->
+<section id="contact-us" class="contact-us section">
+	<div class="container">
+		<div class="contact-head">
+			<div class="row">
+				<div class="col-lg-8 col-12">
+					<div class="form-main">
+						<div class="title">
+							<h4>Get in touch</h4>
+							<h3>Write us a message</h3>
+						</div>
+                        <form asp-action="Contact">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Subject" class="control-label"></label>
+                                <input asp-for="Subject" class="form-control" />
+                                <span asp-validation-for="Subject" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Message" class="control-label"></label>
+                                <textarea asp-for="Message" class="form-control"></textarea>
+                                <span asp-validation-for="Message" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Send" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--/ End Contact -->

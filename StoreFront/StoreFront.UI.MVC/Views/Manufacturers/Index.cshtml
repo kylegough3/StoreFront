@@ -1,0 +1,61 @@
+﻿@model IEnumerable<StoreFront.Data.EF.Models.Manufacturer>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<section class="product_section gray-section pb-4 pt-4 mb-4">
+    <div class="heading_container" align="center">
+        <h2>
+            Our <span>Manufacturers</span>
+        </h2>
+        <p align="center">
+            @if (User.IsInRole("ADMIN"))
+            {
+                <a asp-action="Create">Add New Manufacturer</a>
+
+            }
+
+        </p>
+    </div>
+</section>
+
+<section class="product_section pb-4 pt-4 m-4">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ManufacturerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ManufacturerCity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ManufacturerState)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ManufacturerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ManufacturerCity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ManufacturerState)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ManufacturerId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ManufacturerId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ManufacturerId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

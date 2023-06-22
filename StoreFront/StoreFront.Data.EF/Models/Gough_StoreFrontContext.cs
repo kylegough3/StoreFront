@@ -36,7 +36,7 @@ namespace StoreFront.Data.EF.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;database=Gough_StoreFront;trusted_connection=true;multipleactiveresultsets=true;");
+                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;database=Gough_StoreFront;trusted_connection=true;multipleactiveresultsets=true");
             }
         }
 
@@ -269,10 +269,9 @@ namespace StoreFront.Data.EF.Models
             {
                 entity.Property(e => e.SizeId).HasColumnName("SizeID");
 
-                entity.Property(e => e.Size1)
+                entity.Property(e => e.SizeName)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("Size");
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<StockStatus>(entity =>

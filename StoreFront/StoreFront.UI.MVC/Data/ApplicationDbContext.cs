@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StoreFront.Data.EF.Models;
 
 namespace StoreFront.UI.MVC.Data
 {

@@ -1,0 +1,113 @@
+﻿@model IEnumerable<StoreFront.Data.EF.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<section class="product_section gray-section pb-4 pt-4 mb-4">
+    <div class="heading_container" align="center">
+        <h2>
+            Our <span>Products</span>
+        </h2>
+        <p align="center">
+            @if (User.IsInRole("ADMIN"))
+            {
+                <a asp-action="Create">Add New Product</a>
+
+            }
+            @*<a asp-action="TiledProducts">Grid View</a>*@
+        </p>
+    </div>
+</section>
+
+
+<section class="product_section pb-4 pt-4 m-4">
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.QtyInStock)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Manufacturer.ManufacturerName)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.SizeName)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.StockStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+               @* @Html.DisplayFor(modelItem => item.Name)*@
+                    <a asp-action="Details" asp-route-id="@item.ProductId">@Html.DisplayFor(modelItem => item.Name) </a>
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.QtyInStock)
+            </td>*@
+            <td>
+                @*@Html.DisplayFor(modelItem => item.ProductImage)*@
+                        <a asp-action="Details" asp-route-id="@item.ProductId" asp-route-prevAction="Index">
+                            <img src="~/images/t_@item.ProductImage" class="img-fluid" alt="@item.Description">
+                        </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manufacturer.ManufacturerName)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Size.SizeName)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.StockStatus.Status)
+            </td>
+            <td>
+                @if (User.IsInRole("ADMIN"))
+                    {
+                    <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> <span>|</span>
+                    @if (item.OrderProducts.Count() ==0)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                        }
+                        else
+                        {
+                            <a disabled="true" class="text-danger" style="text-decoration: line-through;"
+                               title="Can't delete - referenced by other records">Delete</a>
+                        }
+                    
+                    }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</section>
