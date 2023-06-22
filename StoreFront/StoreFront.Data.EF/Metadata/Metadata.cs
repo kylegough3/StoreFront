@@ -89,6 +89,9 @@ namespace StoreFront.Data.EF.Models //.Metadata
         public string? Description { get; set; }
         //public int? CategoryId { get; set; }
         //public int? SizeId { get; set; }
+
+        [DataType(DataType.Currency)]
+        [Range(0,(double)decimal.MaxValue)]
         public decimal Price { get; set; }
         //public int? ManufacturerId { get; set; }
         //public int? StockStatusId { get; set; }

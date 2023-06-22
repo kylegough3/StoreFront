@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using StoreFront.Data.EF.Models;
 
 namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
 {
@@ -97,6 +99,39 @@ namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            //Custom fields from User table of Gough_StoreFront database for reference in the Razor/View
+            [Required(ErrorMessage = "* First Name is Required")]
+            [DisplayName("First Name")]
+            [StringLength(50, ErrorMessage = "* Max 50 Characters")]
+            public string FirstName { get; set; } = null!;
+
+            [Required(ErrorMessage = "* Last Name is Required")]
+            [DisplayName("Last Name")]
+            [StringLength(50, ErrorMessage = "* Max 50 Characters")]
+            public string LastName { get; set; } = null!;
+
+            [Required(ErrorMessage = "* Address is Required")]
+            [StringLength(150, ErrorMessage = "* Max 150 Characters")]
+            public string Address { get; set; }
+
+            [Required(ErrorMessage = "* City is Required")]
+            [StringLength(50, ErrorMessage = "* Max 50 Characters")]
+            public string City { get; set; }
+
+            [Required(ErrorMessage = "* State is Required")]
+            [StringLength(2, ErrorMessage = "* Max 2 Characters")]
+            public string State { get; set; }
+
+            [Required(ErrorMessage = "* Zip is Required")]
+            [StringLength(5, ErrorMessage = "* Max 5 Characters")]
+            [DataType(DataType.PostalCode)]
+            public string Zip { get; set; }
+
+            [Required(ErrorMessage = "* Phone is Required")]
+            [StringLength(24, ErrorMessage = "* Max 24 Characters")]
+            [DataType(DataType.PhoneNumber)]
+            public string Phone { get; set; }
         }
 
 
@@ -123,6 +158,30 @@ namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+
+                    //Adding Custom User info Registration into databse
+
+                    Gough_StoreFrontContext _context = new Gough_StoreFrontContext();
+
+                    //Instantiate the User info object that will save info to the database
+                    User userInfo = new User()
+                    {
+                        UserId = userId,
+                        FirstName = Input.FirstName,
+                        LastName = Input.LastName,
+                        Address = Input.Address,
+                        City = Input.City,
+                        State = Input.State,
+                        Zip = Input.Zip,
+                        Phone = Input.Phone,
+                    };
+
+                    //Queue the record to be saved, then save the record
+                    _context.Users.Add(userInfo);
+                    _context.SaveChanges();
+
+                    //End custom code for User info
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

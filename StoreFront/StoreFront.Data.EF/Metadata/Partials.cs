@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 
 namespace StoreFront.Data.EF.Models //.Metadata
@@ -21,7 +24,11 @@ namespace StoreFront.Data.EF.Models //.Metadata
     public partial class OrderProducts { }
 
     [ModelMetadataType(typeof(ProductMetadata))]
-    public partial class Product { }
+    public partial class Product 
+    {
+        [NotMapped]
+        public IFormFile? Image { get; set; }
+    }
 
     [ModelMetadataType(typeof(StockStatusMetadata))]
     public partial class StockStatus { }

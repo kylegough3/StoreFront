@@ -23,17 +23,17 @@ namespace StoreFront.UI.MVC.Controllers
             return View();
         }
         
-        public IActionResult About()
+        public IActionResult Cart()
         {
             return View();
         }
         
-        public IActionResult News()
+        public IActionResult Checkout()
         {
             return View();
         }
         
-        public IActionResult Cycle()
+        public IActionResult ShopGrid()
         {
             return View();
         }
