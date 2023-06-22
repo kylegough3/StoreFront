@@ -19,6 +19,14 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options=>options.SignIn.Requir
     .AddEntityFrameworkStores < ApplicationDbContext > ();
 builder.Services.AddControllersWithViews();
 
+//Register the session service to use for shopping cart
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.HttpOnly = true; //set cookies in unsecure connections
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,6 +45,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+//Ensure session services are implements
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
