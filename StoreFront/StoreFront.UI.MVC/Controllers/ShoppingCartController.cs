@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Newtonsoft.Json; //access to Json actions
 using StoreFront.Data.EF.Models; //access to context and product classes
 using StoreFront.UI.MVC.Models; //access to CartItemViewModel
-using Newtonsoft.Json; //access to Json actions
+
 
 namespace StoreFront.UI.MVC.Controllers
 {
@@ -40,7 +40,7 @@ namespace StoreFront.UI.MVC.Controllers
             }
 
 
-            return View(sessionCart);
+            return View(shoppingCart);
         }
 
         public IActionResult AddToCart(int id)
@@ -84,7 +84,96 @@ namespace StoreFront.UI.MVC.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult RemoveFromCart(int id) 
+        {
+            //Retreve cart session and convert to C#
+            var sessionCart = HttpContext.Session.GetString("cart");
+            Dictionary<int, CartItemViewModel> shoppingCart = JsonConvert.DeserializeObject<Dictionary<int,CartItemViewModel>>(sessionCart);
 
+            //Remove the item
+            shoppingCart.Remove(id);
+
+            //If no items remaining in the cart, remove the cart from the session
+            if (shoppingCart.Count ==0)
+            {
+                HttpContext.Session.Remove("cart");
+            }
+            else
+            {
+                //Otherwise update the session variable with the updated cart contents
+                string jsonCart = JsonConvert.SerializeObject(shoppingCart);
+                HttpContext.Session.SetString("cart", jsonCart);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult UpdateCart(int id, int qty)
+        {
+            //Retrieve cart and convert to C#
+            var sessionCart = HttpContext.Session.GetString("cart");
+            Dictionary<int, CartItemViewModel> shoppingCart = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(sessionCart);
+
+            //Update the qty for the CartItemViewModel for the associated product key
+            shoppingCart[id].Qty = qty;
+
+            //Update the session with updated cart
+            //If there are no remaining items in the cart, remove cart from the session
+            if (shoppingCart[id].Qty == 0)
+            {
+                RemoveFromCart(id);
+            }
+            else
+            {
+                string jsonCart = JsonConvert.SerializeObject(shoppingCart);
+                HttpContext.Session.SetString("cart", jsonCart);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> SubmitOrder()
+        {
+            //Retrieve user ID
+            string? userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id;
+
+            //Retrieve the UserDetails record
+            User u = _context.Users.Find(userId);
+
+            //Create the Order object and assign values
+            Order o = new Order()
+            {
+                UserId = userId,
+                OrderDate = DateTime.Now,
+                ShipTo = u.FirstName + " " + u.LastName,
+                City = u.City,
+                State = u.State,
+                Zip = u.Zip
+            };
+
+            //Add the order object to the _context (queues record to be saved in DB)
+            _context.Orders.Add(o);
+
+            //Retrieve session cart and convert to C#
+            var sessionCart = HttpContext.Session.GetString("cart");
+            Dictionary<int, CartItemViewModel> shoppingCart = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(sessionCart);
+
+            //Create OrderProduct object for each item in cart
+            foreach (var item in shoppingCart)
+            {
+                OrderProduct op = new OrderProduct()
+                {
+                    ProductId = item.Key,
+                    OrderId = o.OrderId,
+                    Quantity = (short)item.Value.Qty,
+                    ProductPrice = item.Value.Product.Price
+                };
+
+                //Add OP record to existing order entity since records are related
+                o.OrderProducts.Add(op);
+
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index","Orders");
+        }
 
     }
 

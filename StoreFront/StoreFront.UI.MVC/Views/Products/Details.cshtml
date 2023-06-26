@@ -4,9 +4,9 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1 align="center">Details</h1>
 
-<div>
+<div class="container">
     <h4>Product</h4>
     <hr />
     <dl class="row">
@@ -38,35 +38,40 @@
             @Html.DisplayNameFor(model => model.ProductImage)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductImage)
+            @*@Html.DisplayFor(model => model.ProductImage)*@
+            <img src="~/images/@Model.ProductImage" alt="@Model.Name" class="img-fluid" />
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryId)
+            @Html.DisplayFor(model => model.Category.Type)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Manufacturer)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Manufacturer.ManufacturerId)
+            @Html.DisplayFor(model => model.Manufacturer.ManufacturerName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Size)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Size.SizeId)
+            @Html.DisplayFor(model => model.Size.SizeName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.StockStatus)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StockStatus.StockStatusId)
+            @Html.DisplayFor(model => model.StockStatus.Status)
         </dd>
     </dl>
 </div>
-<div>
+<div class="row" align="center">
+    <div class="col-md-6 offset-3">
+
+    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@Model.ProductId">Add To Cart</a> |
     <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
+    </div>
 </div>

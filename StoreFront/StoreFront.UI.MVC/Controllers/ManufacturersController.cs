@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.Data.EF.Models;
+using Microsoft.AspNetCore.Authorization; //used to lock down controller
 
 namespace StoreFront.UI.MVC.Controllers
 {
+
     public class ManufacturersController : Controller
     {
         private readonly Gough_StoreFrontContext _context;
@@ -26,6 +28,9 @@ namespace StoreFront.UI.MVC.Controllers
                           Problem("Entity set 'Gough_StoreFrontContext.Manufacturers'  is null.");
         }
 
+
+        #region Orignal Scaffolded EF Actions
+                
         // GET: Manufacturers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -153,6 +158,38 @@ namespace StoreFront.UI.MVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        #endregion
+
+        #region AJAX CRUD Functionality
+        [AcceptVerbs("POST")]
+        public JsonResult AjaxDelete(int id)
+        {
+            Manufacturer manufacturer = _context.Manufacturers.Find(id);
+            _context.Manufacturers.Remove(manufacturer);
+            _context.SaveChanges();
+
+            string confirmMessage = $"Deleted {manufacturer.ManufacturerName} from database";
+            return Json(new {id=id, message = confirmMessage});
+        }
+
+        public PartialViewResult ManufacturerDetails(int id)
+        {
+            Manufacturer manufacturer = _context.Manufacturers.Find(id);
+            return PartialView(manufacturer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult AjaxCreate(Manufacturer manufacturer)
+        {
+            _context.Manufacturers.Add(manufacturer);
+            _context.SaveChanges();
+
+            return Json(manufacturer);
+        }
+
+        #endregion
 
         private bool ManufacturerExists(int id)
         {

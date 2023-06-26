@@ -24,6 +24,10 @@
     <link rel="stylesheet" href="~/css/magnific-popup.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="~/css/font-awesome.css">
+
+    <!-- Datatables-->
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+
     <!-- Fancybox -->
     <link rel="stylesheet" href="~/css/jquery.fancybox.min.css">
     <!-- Themify Icons -->
@@ -70,79 +74,10 @@
                             <a href="/"><img src="~/images/logo.png" alt="logo"></a>
                         </div>
                         <!--/ End Logo -->
-                        <!-- Search Form -->
-                        <div class="search-top">
-                            <div class="top-search"><a href="#0"><i class="ti-search"></i></a></div>
-                            <!-- Search Form -->
-                            <div class="search-top">
-                                <form class="search-form">
-                                    <input type="text" placeholder="Search here..." name="search">
-                                    <button value="search" type="submit"><i class="ti-search"></i></button>
-                                </form>
-                            </div>
-                            <!--/ End Search Form -->
-                        </div>
-                        <!--/ End Search Form -->
+                        
                         <div class="mobile-nav"></div>
                     </div>
-                    <div class="col-lg-8 col-md-7 col-12">
-                        <div class="search-bar-top">
-                            <div class="search-bar">
-                                <select>
-                                    <option selected="selected">All Category</option>
-                                    <option>watch</option>
-                                    <option>mobile</option>
-                                    <option>kid’s item</option>
-                                </select>
-                                <form>
-                                    <input name="search" placeholder="Search Products Here....." type="search">
-                                    <button class="btnn"><i class="ti-search"></i></button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-3 col-12">
-                        <div class="right-bar">
-                            <!-- Search Form -->
-                            <div class="sinlge-bar">
-                                <a href="#" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                            </div>
-                            <div class="sinlge-bar">
-                                <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
-                            </div>
-                            <div class="sinlge-bar shopping">
-                                <!-- Shopping Item -->
-                                <div class="shopping-item">
-                                    <div class="dropdown-cart-header">
-                                        <span>2 Items</span>
-                                        <a href="#">View Cart</a>
-                                    </div>
-                                    <ul class="shopping-list">
-                                        <li>
-                                            <a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                            <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
-                                            <h4><a href="#">Woman Ring</a></h4>
-                                            <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                            <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
-                                            <h4><a href="#">Woman Necklace</a></h4>
-                                            <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                        </li>
-                                    </ul>
-                                    <div class="bottom">
-                                        <div class="total">
-                                            <span>Total</span>
-                                            <span class="total-amount">$134.00</span>
-                                        </div>
-                                        <a href="checkout.html" class="btn animate">Checkout</a>
-                                    </div>
-                                </div>
-                                <!--/ End Shopping Item -->
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -163,11 +98,11 @@
                                                     <ul class="dropdown">
                                                         <li><a href="@Url.Action("Index","Products")">Shop List</a></li>
                                                         <li><a href="shop-grid.html">Shop Grid</a></li>
-                                                        <li><a href="cart.html">Cart</a></li>
+                                                        <li><a href="@Url.Action("Index", "ShoppingCart")">Cart</a></li>
                                                         <li><a href="checkout.html">Checkout</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="#">Pages</a></li>
+                                                <li><a href="@Url.Action("TiledProducts","Products")">Shop</a></li>
                                                 @if (User.IsInRole("ADMIN"))
                                                 {
                                                     <li>
@@ -225,23 +160,12 @@
                         <!-- End Single Widget -->
                     </div>
                     <div class="col-lg-2 col-md-6 col-12">
-                        <!-- Single Widget -->
-                        <div class="single-footer links">
-                            <h4>Information</h4>
-                            <ul>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Faq</a></li>
-                                <li><a href="#">Terms & Conditions</a></li>
-                                <li><a href="@Url.Action("Contact","Home")">Contact Us</a></li>
-                                <li><a href="#">Help</a></li>
-                            </ul>
-                        </div>
-                        <!-- End Single Widget -->
+                        
                     </div>
                     <div class="col-lg-2 col-md-6 col-12">
                         <!-- Single Widget -->
                         <div class="single-footer links">
-                            <h4>Customer Service</h4>
+                            <h4>Customer Service - These Links don't function</h4>
                             <ul>
                                 <li><a href="#">Payment Methods</a></li>
                                 <li><a href="#">Money-back</a></li>
@@ -255,7 +179,7 @@
                     <div class="col-lg-3 col-md-6 col-12">
                         <!-- Single Widget -->
                         <div class="single-footer social">
-                            <h4>Get In Tuch</h4>
+                            <h4>Get In Touch</h4>
                             <!-- Single Widget -->
                             <div class="contact">
                                 <ul>
@@ -263,6 +187,7 @@
                                     <li>012 United Kingdom.</li>
                                     <li>info@eshop.com</li>
                                     <li>+032 3456 7890</li>
+                                    <li><a asp-action="Contact" asp-controller="Home">Email</a></li>
                                 </ul>
                             </div>
                             <!-- End Single Widget -->
@@ -285,7 +210,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-12">
                             <div class="left">
-                                <p>Copyright © 2020 <a href="http://www.wpthemesgrid.com" target="_blank">Wpthemesgrid</a>  -  All Rights Reserved.</p>
+                                <p>Copyright © @DateTime.Now.Year <a href="http://www.wpthemesgrid.com" target="_blank">Wpthemesgrid</a>  -  All Rights Reserved.</p>
                             </div>
                         </div>
                         <div class="col-lg-6 col-12">
@@ -303,12 +228,18 @@
     <script src="~/js/jquery.min.js"></script>
     <script src="~/js/jquery-migrate-3.0.0.js"></script>
     <script src="~/js/jquery-ui.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Datatables -->
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
     <!-- Popper JS -->
     <script src="~/js/popper.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="~/js/bootstrap.min.js"></script>
-    <!-- Color JS -->
-    <script src="~/js/colors.js"></script>
+    @*<!-- Color JS -->
+    <script src="~/js/colors.js"></script>*@
     <!-- Slicknav JS -->
     <script src="~/js/slicknav.min.js"></script>
     <!-- Owl Carousel JS -->
@@ -331,6 +262,9 @@
     <script src="~/js/easing.js"></script>
     <!-- Active JS -->
     <script src="~/js/active.js"></script>
+
+    
+
 
     @RenderSection("Scripts", false)
 
