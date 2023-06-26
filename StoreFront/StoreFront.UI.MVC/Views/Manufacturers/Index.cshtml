@@ -10,18 +10,39 @@
             Our <span>Manufacturers</span>
         </h2>
         <p align="center">
-            @if (User.IsInRole("ADMIN"))
-            {
-                <a asp-action="Create">Add New Manufacturer</a>
-
-            }
+           
 
         </p>
     </div>
 </section>
 
+@if (User.IsInRole("ADMIN"))
+{
+    <section>
+    <div class="row">
+        <div align="center" class="col-md-6 offset-md-3 mb-3">
+            <button id="ToggleManufacturerCreate" class="btn btn-primary">Add New Manufacturer</button>
+        </div>
+    </div>
+
+    <div id="ManufacturerCreate">
+        <partial name="ManufacturerCreate" model="new StoreFront.Data.EF.Models.Manufacturer()" />
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-6 offset-md-3">
+            <div id="MessageContent" class="text-center">
+                @*Div is blank because we're going to use JavaScript to populate*@
+            </div>
+
+        </div>
+    </div>
+</section>
+}
+
 <section class="product_section pb-4 pt-4 m-4">
-    <table class="table">
+    <table class="table" id="ManufacturersTable">
         <thead>
             <tr>
                 <th>
@@ -39,7 +60,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr id="Manufacturer-@item.ManufacturerId">
                     <td>
                         @Html.DisplayFor(modelItem => item.ManufacturerName)
                     </td>
@@ -51,11 +72,96 @@
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.ManufacturerId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ManufacturerId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ManufacturerId">Delete</a>
+                        <button type="button" class="DetailsLink btn btn-link" id="@item.ManufacturerId" data-toggle="modal" data-target="#ManufacturerDetails">Details</button> |
+                        @*<a asp-action="Delete" asp-route-id="@item.ManufacturerId">Delete</a>*@
+                        <a data-ajax="true" data-ajax-confirm="Are you sure you want to delete @item.ManufacturerName?" data-ajax-failure="deleteFailed" data-ajax-success="deleteConfirmed" data-ajax-method="POST" href="~/Manufacturers/AjaxDelete/@item.ManufacturerId">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </section>
+
+<div class="modal fade" id="ManufacturerDetails" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+            </div>
+            <div class="modal-body" id="DetailsBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+  @section Scripts {
+      <script>
+          //***AJAX DELETE*/
+          function deleteConfirmed(response, status, data){
+              let rowId = "#Manufacturer-" + response.id;
+
+              $("#ManufacturersTable").find(rowId).remove();
+
+              $("#MessageContent").html(`<div class='alert alert-success'>` + response.message + `</div>`);
+           }
+
+          function deleteFailed(response, status, data){
+              $("#MessageContent").html(`<div class='alert alert-danger'>Delete unsuccessful</div>`);
+          }
+
+          //***AJAX DETAILS*/
+          $(".DetailsLink").on("click", function(e) {
+              let manId = $(this).attr("id");
+
+              $("#ManufacturerDetails .modal-body").load("/Manufacturer/ManufacturerDetails/" + manId)
+          })
+
+          //***AJAX CREATE*/
+        $("#ManufacturerCreate").hide();
+
+        $("#ToggleManufacturerCreate").on("click", function () {
+            $("#ManufacturerCreate").toggle();
+        });
+
+        /*Summary: When the form is submitted, we will serialize the data and then send that data (JSON) to the Controller. The MessageContent div will display any updates to the user.
+          - Call the POST AjaxCreate() from the Categories controller
+          - Pass the JSON data from the form
+          - On failure: notify use of the error
+          - On success: notify the user, reset the form, and insert the new row into the table on the page
+        */
+        $("#ManufacturerCreateForm").on("submit", function (e) {
+            //Prevents default event behavior -- for forms, this is the page reload when submitted
+            e.preventDefault();
+
+            let formData = $(this).serializeArray();
+
+            console.log(formData);
+
+            $.ajax({
+                url: "/Manufacturers/AjaxCreate",
+                type: "POST",
+                data: formData,
+                datatype: "json",
+                error: function (e) {
+                    $("#MessageContent").html(`<div class="alert alert-danger"> There was a problem... </div>`);
+                },
+                success: function (manufacturer) {
+                    $("#MessageContent").html(`<div class='alert alert-success'> Manufacturer added!</div>`);
+                    $("#ManufacturerCreateForm")[0].reset();
+                    $(function () {
+                        let row = `<tr id="Manufacturer-` + manufacturer.manufacturerId + `"><td>` + manufacturer.manufacturerName + `</td><td>` + manufacturer.manufacturerDescription + `</td><td>Refresh page for options</td></tr>`;
+
+                        $("#ManufacturerTable").append(row);
+
+                        $("#ManufacturerCreate").hide();
+                    });
+                }
+            });
+        });
+      </script>
+ }

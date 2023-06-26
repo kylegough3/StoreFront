@@ -33,6 +33,16 @@ namespace StoreFront.UI.MVC.Controllers
             return View(await gough_StoreFrontContext.ToListAsync());
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> TiledProducts(string searchTerm, int categoryId)
+        {
+            var products = _context.Products
+                .Include(p => p.Category).Include (p => p.Manufacturer).Include(p => p.StockStatus).ToList();
+
+
+            return View(products);
+        }
+
         // GET: Products/Details/5
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)

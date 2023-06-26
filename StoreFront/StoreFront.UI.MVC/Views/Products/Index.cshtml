@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<StoreFront.Data.EF.Models.Product>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Products List";
 }
 
 <section class="product_section gray-section pb-4 pt-4 mb-4">
@@ -15,7 +15,7 @@
                 <a asp-action="Create">Add New Product</a>
 
             }
-            @*<a asp-action="TiledProducts">Grid View</a>*@
+            <a asp-action="TiledProducts">Grid View</a>
         </p>
     </div>
 </section>
@@ -111,3 +111,10 @@
     </tbody>
 </table>
 </section>
+
+@section Scripts {
+    <script>
+        let table = new Datatable('.table');
+    </script>
+    <!-- This is client side searching via Datatables-->
+}
