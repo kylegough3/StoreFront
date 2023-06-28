@@ -51,7 +51,7 @@
                     </select>
 
                     @*Inputs for search functionality*@
-                    <input name="searchy" class="form-control text-center" placeholder="Search Products..." type="text" />
+                    <input name="searchTerm" class="form-control text-center" placeholder="Search Products..." type="text" />
                     <input type="submit" value="Go" class="form-control btn btn-primary text-center w-50 d-block" />
                 </form>
 
@@ -84,7 +84,7 @@
                             </div>
                             <div align="end">
                                 <h5 >
-                                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId">
+                                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId" class="addCart">
                                         Add To Cart
                                     </a>
                                 </h5>

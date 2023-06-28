@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.Data.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreFront.UI.MVC.Controllers
 {
@@ -26,6 +27,9 @@ namespace StoreFront.UI.MVC.Controllers
                           Problem("Entity set 'Gough_StoreFrontContext.Categories'  is null.");
         }
 
+        #region Original Scaffolded EF Actions
+
+        
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -154,6 +158,37 @@ namespace StoreFront.UI.MVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        #endregion
+
+        #region AJAX CRUD Functionality
+        [AcceptVerbs("POST")]
+        public JsonResult AjaxDelete(int id)
+        {
+            Category categories = _context.Categories.Find(id);
+            _context.Categories.Remove(categories);
+            _context.SaveChanges();
+
+            string confirmMessage = $"Deleted {categories.Type} from database";
+            return Json(new { id = id, message = confirmMessage });
+        }
+
+        public PartialViewResult CategoriesDetails(int id)
+        {
+            Category category = _context.Categories.Find(id);
+            return PartialView(category);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult AjaxCreate(Category category)
+        {
+            _context.Categories.Add(category);
+            _context.SaveChanges();
+
+            return Json(category);
+        }
+
+        #endregion
         private bool CategoryExists(int id)
         {
           return (_context.Categories?.Any(e => e.CategoryId == id)).GetValueOrDefault();

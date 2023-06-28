@@ -86,7 +86,7 @@
             <div class="container">
                 <div class="cat-nav-head">
                     <div class="row">
-                        <div class="col-lg-9 col-12">
+                        <div class="col-lg-12 col-12">
                             <div class="menu-area">
                                 <!-- Main Menu -->
                                 <nav class="navbar navbar-expand-lg">
@@ -117,12 +117,14 @@
                                                         <ul class="dropdown">
                                                             <li><a asp-action="Index" asp-controller="Orders">Orders</a></li>
                                                             <li><a asp-action="Index" asp-controller="Manufacturers">Manufacturers</a></li>
+                                                            <li><a asp-action="Index" asp-controller="Categories">Categories</a></li>
                                                         </ul>
                                                     </li>
                                                 }
                                                 <li><a href="@Url.Action("Contact","Home")">Contact Us</a></li>
 
-                                                <partial name="_LoginPartial" />
+                                                <li><partial name="_LoginPartial" /></li>
+                                                <li><a href="@Url.Action("Index", "ShoppingCart")"><img src="~/images/trolly-icon.png"></a></li>
 
                                             </ul>
                                         </div>

@@ -39,6 +39,41 @@ namespace StoreFront.UI.MVC.Controllers
             var products = _context.Products
                 .Include(p => p.Category).Include (p => p.Manufacturer).Include(p => p.StockStatus).ToList();
 
+            #region Category Search
+
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Type");
+            ViewBag.Category = 0;
+            if (categoryId != 0)
+            {
+                products = products.Where(p => p.CategoryId == categoryId).ToList();
+                //Repopulate the dropdown menu with the currently selected category
+                ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Type", categoryId);
+
+                ViewBag.Category = categoryId;
+            }
+            #endregion
+
+            #region Search Filter
+            if (!String.IsNullOrEmpty(searchTerm))
+            {
+                searchTerm = searchTerm.ToLower();
+
+                products = products.Where(p =>
+                p.Name.ToLower().Contains(searchTerm) ||
+                p.Manufacturer.ManufacturerName.ToLower().Contains(searchTerm) ||
+                p.Category.Type.ToLower().Contains(searchTerm) ||
+                p.Description.ToLower().Contains(searchTerm))
+                    .ToList();
+
+                ViewBag.NbrResults = products.Count;
+                ViewBag.SearchTerm = searchTerm;
+            }
+            else
+            {
+                ViewBag.NbrResults = null;
+                ViewBag.SearchTerm = null;
+            }
+            #endregion
 
             return View(products);
         }
